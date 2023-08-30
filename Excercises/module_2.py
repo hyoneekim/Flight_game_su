@@ -42,4 +42,20 @@ lotsToGrams = lots * 13.3
 inTotal = talentsToGrams + poundsToGrams + lotsToGrams
 kilo = int(str(inTotal)[:2])
 gram = inTotal-kilo * 1000
-print(f"The weight in modern units: {kilo} kilograms and {gram:.2f} grams.")
+print(f"The weight in modern units: \n{kilo} kilograms and {gram:.2f} grams.")
+
+#2_6
+import random
+
+firstDigit = random.randint(0,9)
+secondDigit = random.randint(0,9)
+thirdDigit = random.randint(0,9)
+
+print(f"Here is your new 3-digit code: {firstDigit}{secondDigit}{thirdDigit}")
+
+firstDigitFour = random.randint(1,6)
+secondDigitFour = random.randint(1,6)
+thirdDigitFour = random.randint(1,6)
+fourthDigitFour = random.randint(1,6)
+
+print(f"Here is your new 4-digit code: {firstDigitFour}{secondDigitFour}{thirdDigitFour}{fourthDigitFour}")
