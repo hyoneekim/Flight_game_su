@@ -1,15 +1,14 @@
-print("a")
-print("b")
-print("c")
-
 x = int(input("How  much cash you have?"))
+answer = input("Can I check how much you got in your pocket? (y/n)")
 #str = "You have {} cash"
 #print(str.format(x))
 print(f"You said that you have {x}.")
-
-if (x>10):
-    print("you have more than 10 euros.")
-    if ( x>100000):
-        print("You rich bastard")
+if (answer == "y"):
+    if (x>1000):
+        print("you have more than 1000 euros.")
+    elif(x>10):
+        print("You have more than 10 euros, but not as much as 1000 euros.")
+    else:
+        print("You poor thing...")
 else:
-    print("You poor thing...")
+    print("Noooooo why")

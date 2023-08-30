@@ -31,3 +31,15 @@ print(f"Here are the result. \nThe sum: {sumOfThree}, The product: {productOfThr
 
 #2_5
 
+talents = float(input("Enter talents:\n"))
+pounds = float(input("Enter pounds:\n"))
+lots = float(input("enter lots:\n"))
+
+talentsToGrams = talents *20*32*13.3
+poundsToGrams = pounds * 32*13.3
+lotsToGrams = lots * 13.3
+
+inTotal = talentsToGrams + poundsToGrams + lotsToGrams
+kilo = int(str(inTotal)[:2])
+gram = inTotal-kilo * 1000
+print(f"The weight in modern units: {kilo} kilograms and {gram:.2f} grams.")
