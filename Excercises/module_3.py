@@ -1,4 +1,4 @@
-#3_1
+print("\n3_1\n")
 
 ask = float(input("Enter the length of a zander you caught in cm: "))
 short = 42-ask
@@ -7,7 +7,7 @@ if (ask >= 42):
 else:
     print(f"You need to release the fish back, it's {short} centimeter short from the size limit.")
 
-#3_2
+print("\n3_2\n")
 
 cabinClass = input("Please enter the name of your class: ")
 if (cabinClass == "LUX"):
@@ -19,7 +19,7 @@ elif (cabinClass == ("B" or "C")):
 
 else: print("Invalid cabin class")
 
-#3_3
+print("\n3_3\n")
 
 gender = input("What is your gender? (m/f): ")
 hemoglobin = float(input("Enter your hemoglobin value here in g/l here: "))
@@ -41,7 +41,7 @@ elif (gender == "m"):
 else:
     print("Invalid input")
 
-#3_4
+print("\n3_4\n")
 
 year = int(input("Enter a year: "))
 

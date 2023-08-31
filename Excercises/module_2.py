@@ -1,16 +1,17 @@
 #2
 import math
 
-#2_1
+print("\n2_1\n")
+
 name = input("Insert your name here: \n")
 print(f"Hello, {name}!")
 
-#2_2
+print("\n2_2\n")
 radius = float(input("Type radius: "))
 areaOfCircle = math.pi * radius ** 2
 print(f"Area of circle: {areaOfCircle:.4f}")
 
-#2_3
+print("\n2_3\n")
 
 length = float(input("Type length: "))
 width = float(input("Type width: "))
@@ -18,7 +19,7 @@ perimeterOfRectangle = 2*length + 2* width
 areaOfRectangle = length * width
 print(f"The perimeter is {perimeterOfRectangle} and the area is {areaOfRectangle}.")
 
-#2_4
+print("\n2_4\n")
 
 firstNum = int(input("Enter the first integer: "))
 secondNum = int(input("Enter the second integer: "))
@@ -29,7 +30,7 @@ productOfThree = firstNum * secondNum * thirdNum
 aveOfThree = sumOfThree / 3
 print(f"Here are the result. \nThe sum: {sumOfThree}, The product: {productOfThree}, The average: {aveOfThree}.")
 
-#2_5
+print("\n2_5\n")
 
 talents = float(input("Enter talents:\n"))
 pounds = float(input("Enter pounds:\n"))
@@ -44,8 +45,10 @@ kilo = int(str(inTotal)[:2])
 gram = inTotal-kilo * 1000
 print(f"The weight in modern units: \n{kilo} kilograms and {gram:.2f} grams.")
 
-#2_6
+print("\n2_6\n")
 import random
+
+input("Random code drawer. Press enter when you're ready: ")
 
 firstDigit = random.randint(0,9)
 secondDigit = random.randint(0,9)
