@@ -14,7 +14,7 @@ if (cabinClass == "LUX"):
     print("upper-deck cabin with a balcony.")
 elif (cabinClass == "A"):
     print("above the car deck, equipped with a window.")
-elif (cabinClass == ("B" or "C")):
+elif (cabinClass == "B" or cabinClass == "C"):
     print("windowless cabin above the car deck.")
 
 else: print("Invalid cabin class")
@@ -39,7 +39,7 @@ elif (gender == "m"):
     else:
         print("Your hemoglobin value is high.")
 else:
-    print("Invalid input")
+    print("Invalid input on gender. Perhaps you should choose either m or f?")
 
 print("\n3_4\n")
 
