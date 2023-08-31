@@ -5,7 +5,7 @@ short = 42-ask
 if (ask >= 42):
     print(f"Congrats! You have caught a zander that is {ask} centimeter long.")
 else:
-    print(f"You need to release the fist back, it's {short} centimeter shot from the size limit.")
+    print(f"You need to release the fish back, it's {short} centimeter short from the size limit.")
 
 #3_2
 
@@ -18,4 +18,37 @@ elif (cabinClass == ("B" or "C")):
     print("windowless cabin above the car deck.")
 
 else: print("Invalid cabin class")
+
+#3_3
+
+gender = input("What is your gender? (m/f): ")
+hemoglobin = float(input("Enter your hemoglobin value here in g/l here: "))
+
+if (gender == "f"):
+    if ( hemoglobin >= 117 and hemoglobin <= 155):
+        print("Your hemoglobin value is normal.")
+    elif ( hemoglobin < 117 ):
+        print("Your hemoglobin value is low.")
+    else:
+        print("Your hemoglobin value is high.")
+elif (gender == "m"):
+    if (hemoglobin >= 134 and hemoglobin <= 167):
+        print("Your hemoglobin value is normal.")
+    elif (hemoglobin < 134):
+        print("Your hemoglobin value is low.")
+    else:
+        print("Your hemoglobin value is high.")
+else:
+    print("Invalid input")
+
+#3_4
+
+year = int(input("Enter a year: "))
+
+if (year % 100 == 0 and year % 400 == 0):
+    print(f"The year {year} is a leap year.")
+elif (year % 4 == 0 and not year % 100 == 0):
+    print(f"The year {year} is a leap year.")
+else:
+    print(f"The year {year} is not a leap year.")
 
