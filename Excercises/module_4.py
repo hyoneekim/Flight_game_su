@@ -1,4 +1,4 @@
-#4_1
+print("<4_1>\n")
 
 num = 1
 while (num < 1001):
@@ -6,7 +6,7 @@ while (num < 1001):
         print(num)
     num = num + 1
 
-#4_2
+print("\n<4_2>\n")
 
 enterInch = float(input("Enter a number in inch: "))
 while (enterInch > 0):
@@ -16,7 +16,7 @@ while (enterInch > 0):
 
 print("Program ended.")
 
-#4_3
+print("\n<4_3>\n")
 
 askNum = input("Enter a number: ")
 receivedNum = float(askNum)
@@ -32,7 +32,7 @@ while (askNum != " "):
     askNum = input("Enter a number: ")
 print(f"The smallest number is {receivedMin} and the largest is {receivedMax}.")
 
-#4_4
+print("\n<4_4>\n")
 
 import random
 
@@ -50,7 +50,7 @@ while (drawNum != guessNum):
 
 print("You got it correct!")
 
-#4_5
+print("\n<4_5>\n")
 
 userID = "python"
 userPW = "rules"
@@ -71,7 +71,7 @@ while (trialCount < 4):
 if (trialCount == 4):
     print("Access denied.")
 
-#4_6
+print("\n<4_6>\n")
 
 askPoints = int(input("How many random points you'd like to generate?: "))
 countPoints = 0
@@ -79,7 +79,7 @@ pointsInCircle = 0
 while ( countPoints < askPoints ):
     pointOfX = random.uniform(-1,1)
     pointOfY = random.uniform(-1,1)
-    #to check if the points are generated normally
+    #to check if the points are generated normally (test with a small number!!)
     #print(f"{pointOfX},{pointOfY}")
     countPoints = countPoints +1
     if (pointOfX ** 2 + pointOfY ** 2 < 1):
