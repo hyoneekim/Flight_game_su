@@ -72,3 +72,19 @@ if (trialCount == 4):
     print("Access denied.")
 
 #4_6
+
+askPoints = int(input("How many random points you'd like to generate?: "))
+countPoints = 0
+pointsInCircle = 0
+while ( countPoints < askPoints ):
+    pointOfX = random.uniform(-1,1)
+    pointOfY = random.uniform(-1,1)
+    #to check if the points are generated normally
+    #print(f"{pointOfX},{pointOfY}")
+    countPoints = countPoints +1
+    if (pointOfX ** 2 + pointOfY ** 2 < 1):
+        pointsInCircle = pointsInCircle + 1
+approxOfPi = 4 * pointsInCircle / askPoints
+print(f"Approximation of Pi is {approxOfPi}.")
+
+
