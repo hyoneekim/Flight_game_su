@@ -28,3 +28,27 @@ print(f"The five greatest numbers are: \n {receivedNum[0:5]}")
 
 print("\n5_3\n")
 
+whatNum = int(input("Enter an integer number: "))
+numRange = []
+
+for n in range(2,whatNum):
+    if(whatNum % n == 0) :
+        numRange.append(n)
+
+if len(numRange) == 0:
+    print(f"{whatNum} is a prime number.")
+else:
+    print(f"{whatNum} isn't a prime number, and it's also divisible by {numRange}.")
+
+
+print("\n5_4\n")
+
+cities = []
+
+for city in range(5):
+    askCity = input("Enter a city: ")
+    cities.append(askCity)
+
+for n in cities:
+    print(n)
+
