@@ -35,3 +35,17 @@ while (result != numAsked):
     print(f" {count2} round's result: {result}")
     count2 = count2 + 1
     result = dice_custom(numAsked)
+
+print("\n6_3\n")
+
+def gallon_to_litre(num):
+    toLiter = num * 3.78541
+    return toLiter
+
+askUser = float(input("How much in gallons?: "))
+
+while ( askUser >= 0):
+    print(f"{askUser} gallon is {gallon_to_litre(askUser):3f} litres.")
+    askUser = float(input("How much in gallons?: "))
+
+
