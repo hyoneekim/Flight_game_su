@@ -42,10 +42,32 @@ def gallon_to_litre(num):
     toLiter = num * 3.78541
     return toLiter
 
-askUser = float(input("How much in gallons?: "))
+askUser = float(input("How much gallons?: "))
 
 while ( askUser >= 0):
     print(f"{askUser} gallon is {gallon_to_litre(askUser):3f} litres.")
-    askUser = float(input("How much in gallons?: "))
+    askUser = float(input("How much gallons?: "))
+
+print("\n6_4\n")
+
+def sum_lst(list):
+    sumNum = 0
+    for i in list:
+        sumNum += i
+    return sumNum
 
 
+lst = [3,4,6,7]
+print(sum_lst(lst))
+
+print("\n6_5\n")
+
+def lst_noOdd(list):
+    for i in list:
+        if (i % 2 !=0):
+            list.remove(i)
+    return list
+
+numLst = [1,2,3,4,5,6,7,8,9]
+print(numLst)
+print(lst_noOdd(numLst))
