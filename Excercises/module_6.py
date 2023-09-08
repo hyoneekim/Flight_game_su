@@ -71,3 +71,27 @@ def lst_noOdd(list):
 numLst = [1,2,3,4,5,6,7,8,9]
 print(numLst)
 print(lst_noOdd(numLst))
+
+print("\n6_6\n")
+
+import math
+
+def pizza_price(dia,price):
+   unitPrice = price / (dia**2 * math.pi) * 100
+   return unitPrice
+
+
+firstDia= float(input("Enter the diameter of the first pizza (cm): "))
+firstPrice= float(input("and the price of it (Euro): "))
+secondDia= float(input("Enter the diameter of the second pizza (cm): "))
+secondPrice= float(input("and the price of it (Euro): "))
+
+print(f"The unit price of the first pizza is {pizza_price(firstDia,firstPrice):.3f} / m^2.")
+print(f"The unit price of the second pizza is {pizza_price(secondDia,secondPrice):.3f} / m^2.")
+
+if (pizza_price(firstDia, firstPrice) < pizza_price(secondDia, secondPrice)):
+   print("first pizza has better value.")
+elif (pizza_price(firstDia, firstPrice) > pizza_price(secondDia, secondPrice)):
+   print("The second pizza has better value.")
+else:
+   print("The pizzas has the same value.")
