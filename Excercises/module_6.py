@@ -14,7 +14,7 @@ result = dice()
 while (result != 6):
     results.append(result)
     print(f" {count} round's result: {result}")
-    count = count + 1
+    count += 1
     result = dice()
 
 print("\n6_2\n")
@@ -42,11 +42,11 @@ def gallon_to_litre(num):
     toLiter = num * 3.78541
     return toLiter
 
-askUser = float(input("How much gallons?: "))
+askUser = float(input("How much gallons? Exit by entering negative value: "))
 
 while ( askUser >= 0):
     print(f"{askUser} gallon is {gallon_to_litre(askUser):3f} litres.")
-    askUser = float(input("How much gallons?: "))
+    askUser = float(input("How much gallons? Exit by entering negative value: "))
 
 print("\n6_4\n")
 
