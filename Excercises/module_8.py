@@ -30,3 +30,24 @@ connection = mysql.connector.connect(
 
 ident = input("Enter a ICAO code: ")
 getAirportnameByICAOcode(ident)
+
+print("\n\n<8_2>\n\n")
+
+# Write a program that asks the user to enter the area code (for example FI)
+# and prints out the airports located in that country ordered by airport type.
+# For example, Finland has 65 small airports, 15 helicopter airports and so on.
+
+def getCountryAndTypeByIso_country(iso_country):
+    sql = "SELECT airport.name, airport.type from country, airport WHERE country.iso_country = airport.iso_country AND airport.iso_country = '" + iso_country + "' ORDER BY airport.type"
+    print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    if cursor.rowcount >0 :
+        for row in result:
+            print(f"The airport in area {iso_country}: {row[0]} and its type is {row[1]}.")
+        return
+
+iso_country = input("Enter an area code: ")
+getCountryAndTypeByIso_country(iso_country)
+
