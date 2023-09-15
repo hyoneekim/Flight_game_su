@@ -64,27 +64,27 @@ print("\n\n<8_3>\n\n")
 def calculateDistance(ident1,ident2):
     from geopy import distance
 
-    sql = "SELECT latitude_deg, longitude_deg, name FROM airport WHERE ident = '" + ident1 + "'"
-    print(sql)
+    sql1 = "SELECT latitude_deg, longitude_deg, name FROM airport WHERE ident = '" + ident1 + "'"
+    print(sql1)
     cursor = connection.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql1)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
-            print(f"The {row[2]} is located in ({row[0]},{row[1]}).")
+           # print(f"The {row[2]} is located in ({row[0]},{row[1]}).")
             lo1 = (row[0],row[1])
 
-    sql = "SELECT latitude_deg, longitude_deg, name FROM airport WHERE ident = '" + ident2 + "'"
-    print(sql)
+    sql2 = "SELECT latitude_deg, longitude_deg, name FROM airport WHERE ident = '" + ident2 + "'"
+    print(sql2)
     cursor = connection.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql2)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
-            print(f"The {row[2]} is located in ({row[0]},{row[1]}).")
+           # print(f"The {row[2]} is located in ({row[0]},{row[1]}).")
             lo2 =(row[0],row[1])
     distanceKm = distance.distance(lo1,lo2).km
-    print(f"The distance between {ident1} and {ident2} is {distanceKm:.3f}Km.")
+    print(f"The distance between {ident1} and {ident2} is approx. {distanceKm:.3f} km.")
 
 
 
