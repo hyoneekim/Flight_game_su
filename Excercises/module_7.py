@@ -46,7 +46,7 @@ while (askName != ""):
     is_name_in(askName, names)
     askName = input("Enter a name. Exit by hitting Enter key.: ")
 if (askName == ""):
-    print("The listed names are: \n")
+    print("\nYou chose to exit. \nThe listed names are: \n")
     for x in names:
         print(x)
 
@@ -70,17 +70,17 @@ processing = True
 
 def add_airport (y):
    ICAO = input("\nEnter the ICAO code of a new airport. : ")
-   name = input("\nWhat is the name of the new airport?. : ")
+   name = input("\nWhat is the name of the new airport? : ")
    if (ICAO not in y):
       airports[ICAO] = name
       print("\nThe New airport has been added.")
    else:
-      print("\nThe airport is already in the data.")
+      print("\nThe airport is already in the database.")
 
 def fetch_airport (y):
    ICAO = input("\nEnter the ICAO code of an airport to fetch its data. : ")
    if( ICAO in y):
-      print(f"\nName found: The code {ICAO} is {airports[ICAO]} airport.")
+      print(f"\nName found: The name for code {ICAO} is {airports[ICAO]} airport.")
    else:
       print("\nThe code not found or incorrect input.")
 
