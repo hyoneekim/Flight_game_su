@@ -9,6 +9,7 @@ connection = mysql.connector.connect(
     autocommit = True
 )
 
+# weak logic. need to improve later on.
 def game_over_and_save(id):
     global name, score
     sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (id = {id})"
@@ -50,7 +51,7 @@ game_over_and_save(test1)
 exit_process = True
 
 while exit_process:
-    toScoreboard = input("Do you want to save your score, and go check scoreboard? (y/n) : ")
+    toScoreboard = input("Do you want to go check scoreboard? (y/n) : ")
     if toScoreboard == 'y':
         show_scoreboard()
         exit_process = False
