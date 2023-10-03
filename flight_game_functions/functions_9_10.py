@@ -9,7 +9,7 @@ connection = mysql.connector.connect(
     autocommit = True
 )
 
-def game_over(id):
+def game_over_and_save(id):
     global name, score
     sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (id = {id})"
     print(sql1)
@@ -21,17 +21,41 @@ def game_over(id):
             print(f"{row[0]}, You cannot fly with the remaining budget anywhere. GAME OVER!")
             name = row[0]
             score = row[1]
-    save = input("Do you want to save your score to the score board? (y/n): ")
+    save = input("Do you want to save your score in the score board? (y/n): ")
     if save == 'y':
         sql2 = f"INSERT INTO scoreboard (player_name, score) VALUES (%s, %s)"
         val = [name, score]
         cursor = connection.cursor()
         cursor.execute(sql2, val)
-        print(f"{name} and {score} has been updated to the scoreboard.")
+        print(f"your userid <{name}> and your score <{score}> has been updated to the scoreboard.")
     return
 
+def show_scoreboard():
+    sql = "SELECT * FROM scoreboard ORDER BY score DESC LIMIT 50"
+    print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    if cursor.rowcount > 0:
+        print(f"Player      | score")
+        print(f"--------------------------")
+        for row in result:
+            print(f"{row[1]} | {row[2]}")
+        return
 
-# for test
+# only for test. needs to be change later on when merging all the functions.
 test1 = int(input("player id?: "))
-game_over(test1)
+game_over_and_save(test1)
 
+exit_process = True
+
+while exit_process:
+    toScoreboard = input("Do you want to save your score, and go check scoreboard? (y/n) : ")
+    if toScoreboard == 'y':
+        show_scoreboard()
+        exit_process = False
+    elif toScoreboard == 'n':
+        print("Bye bye!")
+        exit_process = False
+    else:
+        print("Invalid answer. Try again.")
