@@ -33,11 +33,12 @@ def game_over_and_save(id):
 
 def show_scoreboard():
     sql = "SELECT * FROM scoreboard ORDER BY score DESC LIMIT 50"
-    print(sql)
+    #print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
+        print(f"<<<SCORE BOARD>>>")
         print(f"Player      | score")
         print(f"--------------------------")
         for row in result:
