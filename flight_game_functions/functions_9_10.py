@@ -10,6 +10,7 @@ connection = mysql.connector.connect(
 )
 
 def game_over(id):
+    global name, score
     sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (id = {id})"
     print(sql1)
     cursor = connection.cursor()
@@ -18,6 +19,8 @@ def game_over(id):
     if cursor.rowcount == 1:
         for row in result:
             print(f"{row[0]}, You cannot fly with the remaining budget anywhere. GAME OVER!")
+            name = row[0]
+            score = row[1]
         return
 
 # for test
