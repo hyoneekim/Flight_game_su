@@ -11,9 +11,9 @@ connection = mysql.connector.connect(
 
 
 # weak logic. need to improve later on.
-def game_over_and_save(id):
+def game_over_and_save(userid):
     global name, score
-    sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (id = {id})"
+    sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (player_name = '{userid}')"
     #print(sql1)
     cursor = connection.cursor()
     cursor.execute(sql1)
@@ -47,6 +47,30 @@ def show_scoreboard():
         return
 
 # FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
+def main_display(userid):
+    sql1 = f"SELECT COUNT(player_id) FROM choice WHERE player_id = '{userid}'"
+    cursor = connection.cursor()
+    cursor.execute(sql1)
+    result = cursor.fetchall()
+    if cursor.rowcount == 1:
+        for row in result:
+            print(f"ROUND {row[0]}.")
+            print("\n")
+
+    sql2 = f"SELECT co2_budget, co2_consumed, total_travelled FROM player where player_name = '{userid}'"
+    cursor = connection.cursor()
+    cursor.execute(sql2)
+    result = cursor.fetchall()
+    if cursor.rowcount > 0:
+        for row in result:
+            print("<<Your status>>")
+            print("-------------------------------------")
+            print(f"|co2_budget              | {row[0]}|")
+            print(f"|co2_consumed            | {row[1]}|")
+            print(f"|total distance travelled| {row[2]}|")
+            print("-------------------------------------")
+    return
+
 def front_display():
     initial = True
     while initial:
@@ -63,10 +87,13 @@ def front_display():
 
         command = int(input("Enter your command: "))
         if command == 1:
+            test1 = input("player id?: ")  # assuming that the game goes on and reached to this phase.
             # connects to creating userid def. for now, I'm using what I have (game over function -> the end)
-            test1 = int(input("player id?: ")) # assuming that the game goes on and reached to this phase.
+            print(f"Welcome traveller, {test1}! ")
+            main_display(test1)
             game_over_and_save(test1)
             initial = False
+
         elif command == 2:
             print("<<TUTORIAL>>")
             print("\n")
@@ -91,8 +118,13 @@ def front_display():
             print("Invalid command. Please try again!")
 
 
+
+
+
 # only for test. needs to be change later on when merging all the functions.
 front_display()
+
+
 
 exit_process = True
 
