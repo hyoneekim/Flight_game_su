@@ -44,7 +44,6 @@ def range_in (airplane_size, userid):
     global airportCode, range, co2_emission
     current = input("Type the code of your current location: ")
 
-
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
             INNER JOIN airplane on (airplane.size = airport.type)
@@ -66,6 +65,8 @@ def range_in (airplane_size, userid):
 
             if (range > distance) and (co2_emission < left_budget(userid)):
                 print(f"    {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
+                # NEED TO ADD: IF THERE ISN'T ANY RESULT SHOWN HERE, REDIRECT THE PLAYER TO CHOOSE SMALLER PLANE?
+                # AFTER PLANE SELECTION HAS BEEN DONE.
 
     return
 
@@ -157,6 +158,7 @@ def main_display(userid):
         condition_checker(userid)
         range_in(size,userid)
         main_processing = False
+
     print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
     print("\n\n up in the air...")
     print("\n\n 'you've got a message from control tower!' (If event occurs)")
