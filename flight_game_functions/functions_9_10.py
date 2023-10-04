@@ -104,7 +104,9 @@ while exit_process:
             front_display()
         exit_process = False
     elif toScoreboard == 'n':
-        print("Bye bye!")
+        toFrontPage = input("By hitting enter, you'll go back to the front page.: ")
+        if toFrontPage == '':
+            front_display()
         exit_process = False
     else:
         print("Invalid answer. Try again.")
