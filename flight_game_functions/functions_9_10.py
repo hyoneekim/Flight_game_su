@@ -80,7 +80,9 @@ def front_display():
 
         elif command == 3:
             show_scoreboard()
+            print("\n")
             print("Going back to the front page....")
+            print("\n")
         elif command == 4:
             print("Bye bye!")
             initial = False
