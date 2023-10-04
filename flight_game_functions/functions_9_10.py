@@ -123,17 +123,7 @@ def show_scoreboard():
             print(f"{row[1]} | {row[2]}")
         return
 
-# FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
-def main_display(userid):
-    sql1 = f"SELECT COUNT(player_id) FROM choice WHERE player_id = '{userid}'"
-    cursor = connection.cursor()
-    cursor.execute(sql1)
-    result = cursor.fetchall()
-    if cursor.rowcount == 1:
-        for row in result:
-            print(f"ROUND {row[0]+1}")
-            print("\n")
-
+def show_panel(userid):
     sql2 = f"SELECT co2_budget, co2_consumed, total_travelled FROM player where player_name = '{userid}'"
     cursor = connection.cursor()
     cursor.execute(sql2)
@@ -146,10 +136,27 @@ def main_display(userid):
             print(f"|co2_consumed            | {row[1]}|")
             print(f"|total distance travelled| {row[2]}|")
             print("-------------------------------------")
+    return
 
-    test1 = input("Type your player_name: ")
-    size = input("Type size of the plane you choose: ")
-    range_in(size,test1)
+# FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
+def main_display(userid):
+    main_processing = True
+    while main_processing:
+        sql1 = f"SELECT COUNT(player_id) FROM choice WHERE player_id = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql1)
+        result = cursor.fetchall()
+        if cursor.rowcount == 1:
+            for row in result:
+                print(f"ROUND {row[0]+1}")
+                print("\n")
+
+        show_panel(userid)
+
+        size = input("Type size of the plane you choose: ")
+        condition_checker(userid)
+        range_in(size,userid)
+        main_processing = False
     print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
     print("\n\n up in the air...")
     print("\n\n 'you've got a message from control tower!' (If event occurs)")
@@ -175,7 +182,7 @@ def front_display():
 
         command = int(input("Enter your command: "))
         if command == 1:
-            test1 = input("player id?: ")  # assuming that the game goes on and reached to this phase.
+            test1 = input("player_name?: ")  # assuming that the game goes on and reached to this phase.
             # connects to creating userid def. for now, I'm using what I have (game over function -> the end)
             print(f"\nWelcome traveller, {test1}! ")
             main_display(test1)
