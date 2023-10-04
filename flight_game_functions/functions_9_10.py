@@ -74,7 +74,9 @@ def front_display():
             print("Your GOAL is to travel as far as you can go with your limited co2 budget!")
             print("The game ends when you have spent all the budget and can't go anywhere anymore.")
             print("Good luck!")
+            print("\n")
             print("Going back to the front page...")
+            print("\n")
 
         elif command == 3:
             show_scoreboard()
@@ -92,7 +94,7 @@ front_display()
 exit_process = True
 
 while exit_process:
-    toScoreboard = input("Do you want to go check scoreboard? (y/n) : ")
+    toScoreboard = input("Do you want to go check score board? (y/n) : ")
     if toScoreboard == 'y':
         show_scoreboard()
         toFrontPage = input("By hitting enter, you'll go back to the front page.: ")
