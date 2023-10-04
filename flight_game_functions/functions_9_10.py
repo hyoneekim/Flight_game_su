@@ -9,6 +9,52 @@ connection = mysql.connector.connect(
     autocommit = True
 )
 
+# BACKEND functions start here ----------------
+def get_airport_info(icao):
+    sql = f'''SELECT iso_country, ident, name, latitude_deg, longitude_deg
+                  FROM airport
+                  WHERE ident = %s'''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql, (icao,))
+    result = cursor.fetchone()
+    return result
+
+
+def calculate_distance(current, target):
+    from geopy import distance
+
+    start = get_airport_info(current)
+    end = get_airport_info(target)
+    return distance.distance((start['latitude_deg'], start['longitude_deg']),
+                             (end['latitude_deg'], end['longitude_deg'])).km
+
+
+def range_in (airplane_size):
+    global airportCode, range, co2_emission
+    current = input("Type the code of your current location: ")
+
+    sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
+            FROM airport 
+            INNER JOIN airplane on (airplane.size = airport.type)
+            INNER JOIN country on (airport.iso_country = country.iso_country)
+            WHERE airport.type = '{airplane_size}' ORDER BY RAND () LIMIT 5'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    print("\nHere are possible destinations you can choose!\n")
+    print("continent |  country  |  airport  |  distance  | expected co2 emission")
+    print("-----------------------------------------")
+    if cursor.rowcount >0:
+        for row in result:
+            #print(f"{row[0]}")
+            airportCode = row[0]
+            range = row[4]
+            distance = calculate_distance(current, airportCode)
+            co2_emission = distance * row[4]/ row[5]
+            if range > distance:
+                print(f"    {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
+
+    return
 
 def condition_checker(userid):
     global co2_budget, co2_consumed
@@ -72,7 +118,7 @@ def main_display(userid):
     result = cursor.fetchall()
     if cursor.rowcount == 1:
         for row in result:
-            print(f"ROUND {row[0]}.")
+            print(f"ROUND {row[0]+1}")
             print("\n")
 
     sql2 = f"SELECT co2_budget, co2_consumed, total_travelled FROM player where player_name = '{userid}'"
@@ -87,7 +133,17 @@ def main_display(userid):
             print(f"|co2_consumed            | {row[1]}|")
             print(f"|total distance travelled| {row[2]}|")
             print("-------------------------------------")
+
+    size = input("Type size of the plane you choose: ")
+    range_in(size)
+    print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
+    print("\n\n up in the air...")
+    print("\n\n 'you've got a message from control tower!' (If event occurs)")
+    print("\n\n calculate the final co2_spent and update the data to choice table")
+    print("\n\n 'Now it's landing....")
+
     return
+
 
 def front_display():
     initial = True
@@ -107,9 +163,9 @@ def front_display():
         if command == 1:
             test1 = input("player id?: ")  # assuming that the game goes on and reached to this phase.
             # connects to creating userid def. for now, I'm using what I have (game over function -> the end)
-            print(f"Welcome traveller, {test1}! ")
+            print(f"\nWelcome traveller, {test1}! ")
             main_display(test1)
-            game_over_and_save(test1)
+            condition_checker(test1)
             initial = False
 
         elif command == 2:
