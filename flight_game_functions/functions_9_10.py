@@ -46,6 +46,7 @@ def show_scoreboard():
             print(f"{row[1]} | {row[2]}")
         return
 
+# FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
 def front_display():
     initial = True
     while initial:
@@ -62,14 +63,22 @@ def front_display():
 
         command = int(input("Enter your command: "))
         if command == 1:
-            # connects to creating userid def
+            # connects to creating userid def. for now I'm using what I have (game over function)
+            test1 = int(input("player id?: "))
+            game_over_and_save(test1)
             initial = False
         elif command == 2:
-            # bring the tutorial & come back to this page (from another file if possible?)
-            return
+            print("<<TUTORIAL>>")
+            print("\n")
+            print("You're going to travel across the world by choosing a flight.")
+            print("Your GOAL is to travel as far as you can go with your limited co2 budget!")
+            print("The game ends when you have spent all the budget and can't go anywhere anymore.")
+            print("Good luck!")
+            print("Going back to the front page...")
+
         elif command == 3:
             show_scoreboard()
-            return
+            print("Going back to the front page....")
         elif command == 4:
             print("Bye bye!")
             initial = False
@@ -79,8 +88,6 @@ def front_display():
 
 # only for test. needs to be change later on when merging all the functions.
 front_display()
-test1 = int(input("player id?: "))
-game_over_and_save(test1)
 
 exit_process = True
 
