@@ -28,10 +28,22 @@ def calculate_distance(current, target):
     return distance.distance((start['latitude_deg'], start['longitude_deg']),
                              (end['latitude_deg'], end['longitude_deg'])).km
 
+def get_userdata(userid):
+    sql = f'''SELECT player_name, co2_budget, co2_consumed, total_travelled FROM player WHERE player_name = %s
+                '''
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql, (userid,))
+    result = cursor.fetchone()
+    return result
 
-def range_in (airplane_size):
+def left_budget(userid):
+    data = get_userdata(userid)
+    return data['co2_budget'] - data['co2_consumed']
+
+def range_in (airplane_size, userid):
     global airportCode, range, co2_emission
     current = input("Type the code of your current location: ")
+
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -51,7 +63,8 @@ def range_in (airplane_size):
             range = row[4]
             distance = calculate_distance(current, airportCode)
             co2_emission = distance * row[4]/ row[5]
-            if range > distance:
+
+            if (range > distance) and (co2_emission < left_budget(userid)):
                 print(f"    {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
 
     return
@@ -134,8 +147,9 @@ def main_display(userid):
             print(f"|total distance travelled| {row[2]}|")
             print("-------------------------------------")
 
+    test1 = input("Type your player_name: ")
     size = input("Type size of the plane you choose: ")
-    range_in(size)
+    range_in(size,test1)
     print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
     print("\n\n up in the air...")
     print("\n\n 'you've got a message from control tower!' (If event occurs)")
