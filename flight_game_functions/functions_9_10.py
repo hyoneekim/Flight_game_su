@@ -10,7 +10,25 @@ connection = mysql.connector.connect(
 )
 
 
-# weak logic. need to improve later on.
+def condition_checker(userid):
+    global co2_budget, co2_consumed
+
+    sql = f"SELECT co2_budget, co2_consumed FROM player WHERE player_name = '{userid}'"
+
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    if cursor.rowcount == 1:
+        for row in result:
+            co2_budget = row[0]
+            co2_consumed = row[1]
+    co2_left = co2_budget - co2_consumed
+    if co2_left <= 0:
+
+        return game_over_and_save(userid)
+    else:
+        return
+    # weak logic. need to improve later on.
 def game_over_and_save(userid):
     global name, score
     sql1 = f"SELECT player_name, total_travelled FROM player WHERE (co2_budget <= co2_consumed) AND (player_name = '{userid}')"
