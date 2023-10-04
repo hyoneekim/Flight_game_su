@@ -63,8 +63,8 @@ def front_display():
 
         command = int(input("Enter your command: "))
         if command == 1:
-            # connects to creating userid def. for now I'm using what I have (game over function)
-            test1 = int(input("player id?: "))
+            # connects to creating userid def. for now, I'm using what I have (game over function -> the end)
+            test1 = int(input("player id?: ")) # assuming that the game goes on and reached to this phase.
             game_over_and_save(test1)
             initial = False
         elif command == 2:
@@ -82,6 +82,7 @@ def front_display():
             show_scoreboard()
             print("\n")
             print("Going back to the front page....")
+            print("\n")
             print("\n")
         elif command == 4:
             print("Bye bye!")
