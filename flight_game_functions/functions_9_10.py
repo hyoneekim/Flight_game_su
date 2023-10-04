@@ -9,6 +9,7 @@ connection = mysql.connector.connect(
     autocommit = True
 )
 
+
 # weak logic. need to improve later on.
 def game_over_and_save(id):
     global name, score
@@ -45,7 +46,39 @@ def show_scoreboard():
             print(f"{row[1]} | {row[2]}")
         return
 
+def front_display():
+    initial = True
+    while initial:
+        print("----------------------")
+        print("|  NAME OF THE GAME  |")
+        print("|                    |")
+        print("----------------------")
+        print("\n")
+        print("1: START A NEW GAME")
+        print("2: CHECK TUTORIAL")
+        print("3: SCORE BOARD")
+        print("4: QUIT")
+        print("\n")
+
+        command = int(input("Enter your command: "))
+        if command == 1:
+            # connects to creating userid def
+            initial = False
+        elif command == 2:
+            # bring the tutorial & come back to this page (from another file if possible?)
+            return
+        elif command == 3:
+            show_scoreboard()
+            return
+        elif command == 4:
+            print("Bye bye!")
+            initial = False
+        else:
+            print("Invalid command. Please try again!")
+
+
 # only for test. needs to be change later on when merging all the functions.
+front_display()
 test1 = int(input("player id?: "))
 game_over_and_save(test1)
 
@@ -55,6 +88,9 @@ while exit_process:
     toScoreboard = input("Do you want to go check scoreboard? (y/n) : ")
     if toScoreboard == 'y':
         show_scoreboard()
+        toFrontPage = input("By hitting enter, you'll go back to the front page.: ")
+        if toFrontPage == '':
+            front_display()
         exit_process = False
     elif toScoreboard == 'n':
         print("Bye bye!")
