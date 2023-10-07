@@ -48,13 +48,6 @@ def create_player():
 
     return name
 
-def save_round(turn,userid):
-    sql2 = f"INSERT INTO choice (id, player_id) VALUES (%s,%s)"
-    val = [turn, userid]
-    cursor = connection.cursor()
-    cursor.execute(sql2, val)
-    return
-
 # Rabin's code (modified)
 def show_and_choose_airplane():
     mycursor = connection.cursor()
@@ -197,7 +190,7 @@ def main_display(userid):
     global turn
     main_processing = True
     while main_processing:
-        sql1 = f"SELECT COUNT(player_id) FROM choice WHERE player_id = '{userid}'"
+        sql1 = f"SELECT COUNT(player_name) FROM choice WHERE player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql1)
         result = cursor.fetchall()
@@ -207,6 +200,10 @@ def main_display(userid):
                 print(f"ROUND {turn}")
                 print("\n")
 
+        sql2 = f"INSERT INTO choice (id, player_name) VALUES(%s,%s) "
+        val2 = [turn,userid]
+        cursor = connection.cursor()
+        cursor.execute(sql2,val2)
         show_panel(userid)
         condition_checker(userid)
 
