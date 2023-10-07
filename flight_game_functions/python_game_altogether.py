@@ -98,8 +98,8 @@ def left_budget(userid):
     data = get_userdata(userid)
     return data['co2_budget'] - data['co2_consumed']
 
-def range_in (airplane_size, userid, current = 'EFHK'):
-    global airportCode, range, co2_emission
+def range_in (airplane_size, userid, turn, current = 'EFHK'):
+    global airportCode, range, co2_emission, destination
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -112,18 +112,33 @@ def range_in (airplane_size, userid, current = 'EFHK'):
     print("\nHere are possible destinations you can choose!\n")
     print("num| continent |  country  |      airport      |  distance  | expected co2 emission")
     print("-----------------------------------------")
-    if cursor.rowcount > 0:
-        for index, row in enumerate(result, start=1):
-            # print(f"{row[0]}")
+    if cursor.rowcount >0:
+        destination = list()
+        for index, row in enumerate(result, start= 1):
             airportCode = row[0]
             range = row[4]
             distance = calculate_distance(current, airportCode)
-            co2_emission = distance * row[4] / row[5]
+            co2_emission = distance * row[4]/ row[5]
+
 
             if (range > distance) and (co2_emission < left_budget(userid)):
                 print(f"{index}   |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
+                destination.append((airportCode, round(distance), round(co2_emission)))
 
-    return
+    choice = int(input("Where do you want to travel? Type the number!: "))
+    #print(destination)
+    chosen = destination[choice -1]
+    #print(chosen)
+    chosenId = chosen[0]
+    chosenDis = chosen[1]
+    chosenCo2 = chosen[2]
+    sql2 = f'''INSERT INTO distance (departure_code, destination_code ,distance_km) VALUES(%s,%s,%s)
+                '''
+    cursor = connection.cursor()
+    cursor.execute(sql2, (current, chosenId, chosenDis))
+    sql3 = f"UPDATE choice SET co2_spent= {chosenCo2} WHERE id = {turn}"
+    cursor = connection.cursor()
+    cursor.execute(sql3)
 
 def condition_checker(userid):
     global co2_budget, co2_consumed
@@ -219,7 +234,7 @@ def main_display(userid):
 
 
         airplane = show_and_choose_airplane(userid)
-        range_in(airplane, userid)
+        range_in(airplane,userid,1)
         main_processing = False
 
     print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
