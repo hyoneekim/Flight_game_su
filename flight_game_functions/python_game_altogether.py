@@ -20,35 +20,52 @@ def get_airport_info(icao):
     return result
 
 #Riina's code
-def create_player(name):
-    sql = f"SELECT player_name FROM player WHERE player_name = '{name}' "
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
+def create_player():
 
-    if cursor.rowcount == 0:
-        co2_budget = 20000
-        co2_consumed = 0
-        total_travelled = 0
-        sql2 = f"INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)"
-        val = [name, co2_budget, co2_consumed, total_travelled]
+    while True:
+        name = input("Enter name: ")
+
+        sql = f"SELECT player_name FROM player WHERE player_name = '{name}' "
         cursor = connection.cursor()
-        cursor.execute(sql2, val)
-        cursor.fetchall()
+        cursor.execute(sql)
+        result = cursor.fetchall()
 
-    else:
-        name2 = input("Player already exists, enter new name: ")
-        co2_budget = 20000
-        co2_consumed = 0
-        total_travelled = 0
-        sql2 = f"INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)"
-        val = [name2, co2_budget, co2_consumed, total_travelled]
-        cursor = connection.cursor()
-        cursor.execute(sql2, val)
-        cursor.fetchall()
+        if cursor.rowcount == 0:
+            co2_budget = 100000000
+            co2_consumed = 0
+            total_travelled = 0
+            sql2 = f"INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)"
+            val = [name, co2_budget, co2_consumed, total_travelled]
+            cursor = connection.cursor()
+            cursor.execute(sql2, val)
+            cursor.fetchall()
+            break
 
-    return
+        else:
+            print("Player already exists!")
 
+    print(f"\nWelcome traveller, {name}! ")
+
+    return name
+# Rabin's code (modified)
+def show_and_choose_airplane():
+    mycursor = connection.cursor()
+    mycursor.execute("select type, size, capacity, co2_emission_per_km, max_range FROM airplane")
+    results = mycursor.fetchall()
+
+    print("Please choose your airplane: ")
+    for idx, row in enumerate(results, start = 1):
+        print(f"{idx}. {row[0]}")
+
+    choice = int(input("Your choice?(1-4): "))
+    if choice == 1:
+        return "large_airport"
+    elif choice == 2:
+        return "medium_airport"
+    elif choice == 3:
+        return "heliport"
+    elif choice == 4:
+        return "small_airport"
 
 def calculate_distance(current, target):
     from geopy import distance
@@ -57,6 +74,7 @@ def calculate_distance(current, target):
     end = get_airport_info(target)
     return distance.distance((start['latitude_deg'], start['longitude_deg']),
                              (end['latitude_deg'], end['longitude_deg'])).km
+
 
 def get_userdata(userid):
     sql = f'''SELECT player_name, co2_budget, co2_consumed, total_travelled FROM player WHERE player_name = %s
@@ -70,9 +88,8 @@ def left_budget(userid):
     data = get_userdata(userid)
     return data['co2_budget'] - data['co2_consumed']
 
-def range_in (airplane_size, userid):
+def range_in (airplane_size, userid, current = 'EFHK'):
     global airportCode, range, co2_emission
-    current = input("Type the code of your current location: ")
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -83,20 +100,18 @@ def range_in (airplane_size, userid):
     cursor.execute(sql)
     result = cursor.fetchall()
     print("\nHere are possible destinations you can choose!\n")
-    print("continent |  country  |  airport  |  distance  | expected co2 emission")
+    print("continent |  country  |      airport      |  distance  | expected co2 emission")
     print("-----------------------------------------")
-    if cursor.rowcount >0:
-        for row in result:
-            #print(f"{row[0]}")
+    if cursor.rowcount > 0:
+        for index, row in enumerate(result, start=1):
+            # print(f"{row[0]}")
             airportCode = row[0]
             range = row[4]
             distance = calculate_distance(current, airportCode)
-            co2_emission = distance * row[4]/ row[5]
+            co2_emission = distance * row[4] / row[5]
 
             if (range > distance) and (co2_emission < left_budget(userid)):
-                print(f"    {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
-                # NEED TO ADD: IF THERE ISN'T ANY RESULT SHOWN HERE, REDIRECT THE PLAYER TO CHOOSE SMALLER PLANE?
-                # AFTER PLANE SELECTION HAS BEEN DONE.
+                print(f"{index}   |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
 
     return
 
@@ -183,10 +198,10 @@ def main_display(userid):
                 print("\n")
 
         show_panel(userid)
-
-        size = input("Type size of the plane you choose: ")
         condition_checker(userid)
-        range_in(size,userid)
+
+        airplane = show_and_choose_airplane()
+        range_in(airplane, userid)
         main_processing = False
 
     print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
@@ -214,12 +229,14 @@ def front_display():
 
         command = int(input("Enter your command: "))
         if command == 1:
-            test1 = input("New journey is about to start, what's your name? (create your player id): ")  # assuming that the game goes on and reached to this phase.
-            # connects to creating userid def. for now, I'm using what I have (game over function -> the end)
-            create_player(test1)
-            print(f"\nWelcome traveller, {test1}! ")
-            main_display(test1)
-            condition_checker(test1)
+            print("Your adventure is about to start,")
+            name = create_player()
+            print("Your journey begins at Helsinki-Vantaa airport, Finland.\n")
+
+            main_display(name)
+            condition_checker(name)
+
+
             initial = False
 
         elif command == 2:
