@@ -47,6 +47,14 @@ def create_player():
     print(f"\nWelcome traveller, {name}! ")
 
     return name
+
+def save_round(turn,userid):
+    sql2 = f"INSERT INTO choice (id, player_id) VALUES (%s,%s)"
+    val = [turn, userid]
+    cursor = connection.cursor()
+    cursor.execute(sql2, val)
+    return
+
 # Rabin's code (modified)
 def show_and_choose_airplane():
     mycursor = connection.cursor()
@@ -55,7 +63,7 @@ def show_and_choose_airplane():
 
     print("Please choose your airplane: ")
     for idx, row in enumerate(results, start = 1):
-        print(f"{idx}. {row[0]}")
+        print(f"{idx}. {row[0]} | flies to: {row[1]}")
 
     choice = int(input("Your choice?(1-4): "))
     if choice == 1:
@@ -100,7 +108,7 @@ def range_in (airplane_size, userid, current = 'EFHK'):
     cursor.execute(sql)
     result = cursor.fetchall()
     print("\nHere are possible destinations you can choose!\n")
-    print("continent |  country  |      airport      |  distance  | expected co2 emission")
+    print("num| continent |  country  |      airport      |  distance  | expected co2 emission")
     print("-----------------------------------------")
     if cursor.rowcount > 0:
         for index, row in enumerate(result, start=1):
@@ -186,6 +194,7 @@ def show_panel(userid):
 
 # FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
 def main_display(userid):
+    global turn
     main_processing = True
     while main_processing:
         sql1 = f"SELECT COUNT(player_id) FROM choice WHERE player_id = '{userid}'"
@@ -194,11 +203,14 @@ def main_display(userid):
         result = cursor.fetchall()
         if cursor.rowcount == 1:
             for row in result:
-                print(f"ROUND {row[0]+1}")
+                turn = row[0] +1
+                print(f"ROUND {turn}")
                 print("\n")
 
         show_panel(userid)
         condition_checker(userid)
+
+
 
         airplane = show_and_choose_airplane()
         range_in(airplane, userid)
