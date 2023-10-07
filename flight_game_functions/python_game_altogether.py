@@ -63,18 +63,22 @@ def show_and_choose_airplane(userid):
         sql = f"UPDATE choice SET plane_type = 'large_airport' WHERE player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql)
+        return 'large_airport'
     elif choice == 2:
         sql = f"UPDATE choice SET plane_type = 'medium_airport' WHERE player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql)
+        return 'medium_airport'
     elif choice ==3:
         sql = f"UPDATE choice SET plane_type = 'heliport' WHERE player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql)
+        return 'heliport'
     elif choice == 4:
         sql = sql = f"UPDATE choice SET plane_type = 'small_airport' WHERE player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql)
+        return 'small_airport'
 
 
 def calculate_distance(current, target):
