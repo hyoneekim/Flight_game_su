@@ -49,24 +49,33 @@ def create_player():
     return name
 
 # Rabin's code (modified)
-def show_and_choose_airplane():
+def show_and_choose_airplane(userid):
     mycursor = connection.cursor()
     mycursor.execute("select type, size, capacity, co2_emission_per_km, max_range FROM airplane")
     results = mycursor.fetchall()
 
     print("Please choose your airplane: ")
     for idx, row in enumerate(results, start = 1):
-        print(f"{idx}. {row[0]} | flies to: {row[1]}")
+        print(f"{idx}. {row[0]}")
 
     choice = int(input("Your choice?(1-4): "))
     if choice == 1:
-        return "large_airport"
+        sql = f"UPDATE choice SET plane_type = 'large_airport' WHERE player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
     elif choice == 2:
-        return "medium_airport"
-    elif choice == 3:
-        return "heliport"
+        sql = f"UPDATE choice SET plane_type = 'medium_airport' WHERE player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
+    elif choice ==3:
+        sql = f"UPDATE choice SET plane_type = 'heliport' WHERE player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
     elif choice == 4:
-        return "small_airport"
+        sql = sql = f"UPDATE choice SET plane_type = 'small_airport' WHERE player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
 
 def calculate_distance(current, target):
     from geopy import distance
@@ -209,7 +218,7 @@ def main_display(userid):
 
 
 
-        airplane = show_and_choose_airplane()
+        airplane = show_and_choose_airplane(userid)
         range_in(airplane, userid)
         main_processing = False
 
