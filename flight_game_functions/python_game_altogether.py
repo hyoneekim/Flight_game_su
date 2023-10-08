@@ -102,8 +102,14 @@ def left_budget(userid):
     data = get_userdata(userid)
     return data['co2_budget'] - data['co2_consumed']
 
-def range_in (airplane_size, userid, turn, current = 'EFHK'):
+def range_in (airplane_size, userid, turn):
     global airportCode, co2_emission, destination, chosenId, chosenDis, chosenCo2
+
+    sql4 = f'''SELECT current_location FROM player WHERE player_name = "{userid}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql4)
+    result = cursor.fetchone()
+    current = result[0]
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -116,6 +122,7 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
     print("\nHere are possible destinations you can choose!\n")
     print("num| continent |  country  |      airport      |  distance  | expected co2 emission")
     print("-----------------------------------------")
+
     if cursor.rowcount >= 1:
         destination = list()
         index_counter = 1
@@ -149,6 +156,11 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
 
             cursor = connection.cursor()
             cursor.execute(sql3)
+
+            sql5 = f'''UPDATE player SET current_location = '{airportCode}' WHERE player_name = "{userid}"'''
+            cursor = connection.cursor()
+            cursor.execute(sql5)
+
 
 
 def event_occurrence(turn,userid):
@@ -256,18 +268,25 @@ def show_scoreboard():
         return
 
 def show_panel(userid):
-    sql2 = f"SELECT co2_budget, co2_consumed, total_travelled FROM player where player_name = '{userid}'"
+    global current
+    sql1 = f"SELECT co2_budget, co2_consumed, total_travelled, current_location FROM player where player_name = '{userid}'"
     cursor = connection.cursor()
-    cursor.execute(sql2)
+    cursor.execute(sql1)
     result = cursor.fetchall()
     if cursor.rowcount > 0:
         for row in result:
+            current = row[3]
             print("<<Your status>>")
             print("-------------------------------------")
             print(f"|co2_budget              | {row[0]}|")
             print(f"|co2_consumed            | {row[1]}|")
             print(f"|total distance travelled| {row[2]}|")
             print("-------------------------------------")
+    sql2 =f"SELECT name from airport where ident= '{current}'"
+    cursor = connection.cursor()
+    cursor.execute(sql2)
+    result = cursor.fetchone()
+    print(f"\nYour current location is {result[0]}.")
     return
 
 # FRONT END(ish) FUNCTIONS & CODES START HERE-------------------
@@ -300,7 +319,8 @@ def main_display(userid):
         event_occurrence(turn,userid)
         print("\n\n Now your plane is landing....")
         update_turn_data(turn,userid)
-        main_processing = False # now it's only played once.
+
+        #main_processing = False # now it's only played once.
 
     return
 
@@ -327,7 +347,7 @@ def front_display():
             initial = False
 
             main_display(name)
-            condition_checker(name)
+            #condition_checker(name)
 
 
 
