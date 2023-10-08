@@ -174,7 +174,7 @@ def event_occurrence(turn,userid):
         cursor.execute(sql2)
     else:
         print("\n\nyou've got a message from control tower!")
-        #print(pick)
+        print(row[2])
         print("\nThe event will affect your flight :")
         if row[2] == 'neg':
             #if row[5] == 'NULL': ignoring the distance pe
