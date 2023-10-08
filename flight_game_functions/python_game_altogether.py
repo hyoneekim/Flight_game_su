@@ -153,6 +153,42 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
     cursor = connection.cursor()
     cursor.execute(sql3)
 
+def event_occurrence(turn,userid):
+    import random
+    sql = f"SELECT * from event"
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    random.choice(result)
+    weights = []
+    events = []
+    for row in result:
+        print(row)
+        events.append(row[1])
+        weights.append(row[3]*100)
+
+    #print(weights)
+    pick = random.choices(events, weights = weights, k=1)
+    if row[2] == 'No event':
+        print("")
+        sql2 = f"UPDATE choice SET event_occurred = 0 WHERE id = {turn} AND player_name = '{userid}'"
+        cursor = connection.cursor()
+        cursor.execute(sql2)
+    else:
+        print("\n\nyou've got a message from control tower!")
+        print(pick)
+        print("\nThe event will affect your flight :")
+        if row[2] == 'neg':
+            #if row[5] == 'NULL':
+            print(f"Co2 consumption is {row[4] * 100}% increased!")
+            sql3 = f"UPDATE choice SET event_occurred = 1, co2_spent = co2_spent - co2_spent* {row[4]} WHERE id = {turn} AND player_name = '{userid}'"
+            cursor = connection.cursor()
+            cursor.execute(sql3)
+        elif row[2] == 'pos':
+            print(f"Co2 consumption is {row[4] * 100}% decreased!")
+            sql4 = f"UPDATE choice SET event_occurred = 1, co2_spent = co2_spent - co2_spent* {row[4]} WHERE id = {turn} AND player_name = '{userid}'"
+            cursor = connection.cursor()
+            cursor.execute(sql4)
 def condition_checker(userid):
     global co2_budget, co2_consumed
 
@@ -247,8 +283,8 @@ def main_display(userid):
         airplane = show_and_choose_airplane(userid)
         range_in(airplane,userid,turn)
 
-        print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
-        print("\n\n up in the air...")
+        print("\n\n You're flying up in the air...")
+        event_occurrence(turn,userid)
         print("\n\n 'you've got a message from control tower!' (If event occurs)")
         print("\n\n calculate the final co2_spent and update the data to choice table")
         print("\n\n Now your plane is landing....")
