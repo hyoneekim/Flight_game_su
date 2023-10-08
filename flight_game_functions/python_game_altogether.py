@@ -145,10 +145,10 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
             chosenDis = chosen[1]
             chosenCo2 = chosen[2]
 
-            sql3 = "UPDATE choice SET co2_spent = %s, distance_km = %s WHERE turn = %s AND player_name = %s"
+            sql3 = f"UPDATE choice SET co2_spent = {chosenCo2}, distance_km = {chosenDis} WHERE (turn = {turn} AND player_name = '{userid}')"
 
             cursor = connection.cursor()
-            cursor.execute(sql3, (chosenCo2, chosenDis, turn, userid))
+            cursor.execute(sql3)
 
 
 def event_occurrence(turn,userid):
@@ -197,8 +197,7 @@ def update_turn_data(turn, userid):
     for row in result:
         dis = row[0]
         co2 = row[1]
-    sql2 = f'''UPDATE player SET co2_consumed = co2_consumed + {co2}, total_travelled = total_travelled + {dis} 
-                WHERE turn = {turn} and player_name = "{userid}"'''
+    sql2 = f'''UPDATE player SET co2_consumed = co2_consumed + {co2}, total_travelled = total_travelled + {dis} WHERE player_name = "{userid}"'''
     cursor = connection.cursor()
     cursor.execute(sql2)
 
