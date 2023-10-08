@@ -103,7 +103,7 @@ def left_budget(userid):
     return data['co2_budget'] - data['co2_consumed']
 
 def range_in (airplane_size, userid, turn, current = 'EFHK'):
-    global airportCode, co2_emission, destination
+    global airportCode, co2_emission, destination, chosenId, chosenDis, chosenCo2
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -137,12 +137,14 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
     if choice == "":
         airplane = show_and_choose_airplane(userid)
         range_in(airplane, userid, turn)
+    else:
+        choice = int(choice)
+        if 1 <= choice <= len(destination):
+            chosen = destination[choice - 1]
+            chosenId = chosen[0]
+            chosenDis = chosen[1]
+            chosenCo2 = chosen[2]
 
-    chosen = destination[int(choice) -1]
-    #print(chosen)
-    chosenId = chosen[0]
-    chosenDis = chosen[1]
-    chosenCo2 = chosen[2]
     sql2 = f'''INSERT INTO distance (departure_code, destination_code ,distance_km) VALUES(%s,%s,%s)
                 '''
     cursor = connection.cursor()
