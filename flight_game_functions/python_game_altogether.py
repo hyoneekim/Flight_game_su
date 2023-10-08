@@ -103,7 +103,7 @@ def left_budget(userid):
     return data['co2_budget'] - data['co2_consumed']
 
 def range_in (airplane_size, userid, turn, current = 'EFHK'):
-    global airportCode, range, co2_emission, destination
+    global airportCode, co2_emission, destination
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -116,22 +116,29 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
     print("\nHere are possible destinations you can choose!\n")
     print("num| continent |  country  |      airport      |  distance  | expected co2 emission")
     print("-----------------------------------------")
-    if cursor.rowcount >0:
+    if cursor.rowcount >= 1:
         destination = list()
-        for index, row in enumerate(result, start= 1):
+        index_counter = 1
+        for row in result:
             airportCode = row[0]
             range = row[4]
             distance = calculate_distance(current, airportCode)
             co2_emission = distance * row[4]/ row[5]
+            destination.append((airportCode, round(distance), round(co2_emission)))
+            if (range <= distance) or (co2_emission >= left_budget(userid)):
+                destination.pop()
+            else:
+
+                print(f"{index_counter}  |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
+                index_counter += 1
 
 
-            if (range > distance) and (co2_emission < left_budget(userid)):
-                print(f"{index}   |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
-                destination.append((airportCode, round(distance), round(co2_emission)))
+    choice = input("\nWhere do you want to travel? Type the number!\n If there isn't any destination shown, try another plane. You'll go back by hitting enter: ")
+    if choice == "":
+        airplane = show_and_choose_airplane(userid)
+        range_in(airplane, userid, turn)
 
-    choice = int(input("Where do you want to travel? Type the number!: "))
-    #print(destination)
-    chosen = destination[choice -1]
+    chosen = destination[int(choice) -1]
     #print(chosen)
     chosenId = chosen[0]
     chosenDis = chosen[1]
@@ -158,7 +165,6 @@ def condition_checker(userid):
             co2_consumed = row[1]
     co2_left = co2_budget - co2_consumed
     if co2_left <= 0:
-
         return game_over_and_save(userid)
     else:
         return
@@ -236,16 +242,15 @@ def main_display(userid):
         condition_checker(userid)
 
 
-
         airplane = show_and_choose_airplane(userid)
-        range_in(airplane,userid,1)
-        main_processing = False
+        range_in(airplane,userid,turn)
 
-    print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
-    print("\n\n up in the air...")
-    print("\n\n 'you've got a message from control tower!' (If event occurs)")
-    print("\n\n calculate the final co2_spent and update the data to choice table")
-    print("\n\n 'Now it's landing....")
+        print("\n\n from here continue : ask the player his/her decision and double check=--------`...")
+        print("\n\n up in the air...")
+        print("\n\n 'you've got a message from control tower!' (If event occurs)")
+        print("\n\n calculate the final co2_spent and update the data to choice table")
+        print("\n\n Now your plane is landing....")
+        main_processing = False # now it's only played once.
 
     return
 
@@ -269,12 +274,16 @@ def front_display():
             print("Your adventure is about to start,")
             name = create_player()
             print("Your journey begins at Helsinki-Vantaa airport, Finland.\n")
+            initial = False
 
             main_display(name)
             condition_checker(name)
 
 
-            initial = False
+
+
+
+
 
         elif command == 2:
             print("<<TUTORIAL>>")
@@ -303,8 +312,9 @@ def front_display():
 
 
 
-# only for test. needs to be change later on when merging all the functions.
+#GAME STARTS HERE =====================
 front_display()
+
 
 
 
