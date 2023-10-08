@@ -293,8 +293,8 @@ def main_display(userid):
         range_in(airplane,userid,turn)
 
         print("\n\n You're flying up in the air...")
-        event_occurrence(turn,userid)
-        print("\n\n calculate the final co2_spent and update the data to choice table")
+        event_occurrence(turn, userid)
+
         print("\n\n Now your plane is landing....")
         main_processing = False # now it's only played once.
 
