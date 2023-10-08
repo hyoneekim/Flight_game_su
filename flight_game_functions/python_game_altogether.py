@@ -167,14 +167,14 @@ def event_occurrence(turn,userid):
 
     #print(weights)
     pick = random.choices(events, weights = weights, k=1)
-    if row[2] == 'No event':
+    if row[1] == 'No event':
         print("")
         sql2 = f"UPDATE choice SET event_occurred = 0 WHERE turn = {turn} AND player_name = '{userid}'"
         cursor = connection.cursor()
         cursor.execute(sql2)
     else:
         print("\n\nyou've got a message from control tower!")
-        print(row[2])
+        print(row[1])
         print("\nThe event will affect your flight :")
         if row[2] == 'neg':
             #if row[5] == 'NULL': ignoring the distance pe
