@@ -132,27 +132,23 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
                 print(f"{index_counter}  |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
                 index_counter += 1
 
-
-    choice = input("\nWhere do you want to travel? Type the number!\n If there isn't any destination shown, try another plane. You'll go back by hitting enter: ")
-    if choice == "":
+    choice_input = input(
+        "\nWhere do you want to travel? Type the number!\n If there isn't any destination shown, try another plane. You'll go back by hitting enter: ")
+    if choice_input == "":
         airplane = show_and_choose_airplane(userid)
         range_in(airplane, userid, turn)
     else:
-        choice = int(choice)
+        choice = int(choice_input)
         if 1 <= choice <= len(destination):
             chosen = destination[choice - 1]
             chosenId = chosen[0]
             chosenDis = chosen[1]
             chosenCo2 = chosen[2]
 
-            sql3 = f"UPDATE choice SET co2_spent= {chosenCo2}, distance_km = {chosenDis} WHERE turn = {turn}"
+            sql3 = "UPDATE choice SET co2_spent = %s, distance_km = %s WHERE turn = %s AND player_name = %s"
 
             cursor = connection.cursor()
-            cursor.execute(sql3)
-
-
-
-
+            cursor.execute(sql3, (chosenCo2, chosenDis, turn, userid))
 
 
 def event_occurrence(turn,userid):
@@ -191,6 +187,22 @@ def event_occurrence(turn,userid):
             sql4 = f"UPDATE choice SET event_occurred = 1, co2_spent = co2_spent - co2_spent* {row[4]} WHERE turn = {turn} AND player_name = '{userid}'"
             cursor = connection.cursor()
             cursor.execute(sql4)
+
+def update_turn_data(turn, userid):
+    global dis, co2
+    sql = f'''SELECT distance_km, co2_spent from choice where turn = {turn} and player_name = "{userid}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    for row in result:
+        dis = row[0]
+        co2 = row[1]
+    sql2 = f'''UPDATE player SET co2_consumed = co2_consumed + {co2}, total_travelled = total_travelled + {dis} 
+                WHERE turn = {turn} and player_name = "{userid}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql2)
+
+
 def condition_checker(userid):
     global co2_budget, co2_consumed
 
@@ -288,6 +300,7 @@ def main_display(userid):
         print("\n\n You're flying up in the air...")
         event_occurrence(turn,userid)
         print("\n\n Now your plane is landing....")
+        update_turn_data(turn,userid)
         main_processing = False # now it's only played once.
 
     return
