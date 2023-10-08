@@ -101,9 +101,15 @@ def get_userdata(userid):
 def left_budget(userid):
     data = get_userdata(userid)
     return data['co2_budget'] - data['co2_consumed']
+def distance_to_choice(turn, userid, current, destination):
+    sql = f'''UPDATE choice SET distance_ref = (SELECT record_id FROM distance WHERE departure_code = '{current}' AND destination_code = '{destination}' LIMIT 1)
+                WHERE id = {turn} AND player_name = "{userid}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    cursor.fetchone()
 
 def range_in (airplane_size, userid, turn, current = 'EFHK'):
-    global airportCode, co2_emission, destination, chosenId, chosenDis, chosenCo2
+    global airportCode, co2_emission, destination, chosenIdent, chosenDis, chosenCo2
 
     sql = f'''SELECT ident, airport.name, airport.continent, country.name as country, airplane.max_range, airplane.co2_emission_per_km, airplane.capacity
             FROM airport 
@@ -141,17 +147,20 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
         choice = int(choice)
         if 1 <= choice <= len(destination):
             chosen = destination[choice - 1]
-            chosenId = chosen[0]
+            chosenIdent = chosen[0]
             chosenDis = chosen[1]
             chosenCo2 = chosen[2]
 
     sql2 = f'''INSERT INTO distance (departure_code, destination_code ,distance_km) VALUES(%s,%s,%s)
                 '''
     cursor = connection.cursor()
-    cursor.execute(sql2, (current, chosenId, chosenDis))
+    cursor.execute(sql2, (current, chosenIdent, chosenDis))
     sql3 = f"UPDATE choice SET co2_spent= {chosenCo2} WHERE id = {turn}"
     cursor = connection.cursor()
     cursor.execute(sql3)
+
+    #distance_to_choice(turn,userid,current,destination)
+
 
 def event_occurrence(turn,userid):
     import random
@@ -176,7 +185,7 @@ def event_occurrence(turn,userid):
         cursor.execute(sql2)
     else:
         print("\n\nyou've got a message from control tower!")
-        print(pick)
+        #print(pick)
         print("\nThe event will affect your flight :")
         if row[2] == 'neg':
             #if row[5] == 'NULL':
@@ -285,7 +294,6 @@ def main_display(userid):
 
         print("\n\n You're flying up in the air...")
         event_occurrence(turn,userid)
-        print("\n\n 'you've got a message from control tower!' (If event occurs)")
         print("\n\n calculate the final co2_spent and update the data to choice table")
         print("\n\n Now your plane is landing....")
         main_processing = False # now it's only played once.
