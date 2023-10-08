@@ -102,6 +102,13 @@ def left_budget(userid):
     data = get_userdata(userid)
     return data['co2_budget'] - data['co2_consumed']
 
+def distance_to_choice(turn, userid, current, airportCode):
+    sql = f'''UPDATE choice SET distance_ref = (SELECT record_id FROM distance WHERE departure_code = '{current}' AND destination_code = '{airportCode}' LIMIT 1)
+                WHERE id = {turn} AND player_name = "{userid}"'''
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    cursor.fetchone()
+
 def range_in (airplane_size, userid, turn, current = 'EFHK'):
     global airportCode, co2_emission, destination, chosenId, chosenDis, chosenCo2
 
@@ -153,6 +160,10 @@ def range_in (airplane_size, userid, turn, current = 'EFHK'):
     cursor = connection.cursor()
     cursor.execute(sql3)
 
+    distance_to_choice(turn,userid,current,airportCode)
+
+
+
 def event_occurrence(turn,userid):
     import random
     sql = f"SELECT * from event"
@@ -163,7 +174,7 @@ def event_occurrence(turn,userid):
     weights = []
     events = []
     for row in result:
-        print(row)
+        #print(row)
         events.append(row[1])
         weights.append(row[3]*100)
 
