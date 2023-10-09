@@ -138,28 +138,37 @@ def range_in (airplane_size, userid, turn):
 
                 print(f"{index_counter}  |  {row[2]}    | {row[3]} | {row[1]} | {round(distance)} km | {round(co2_emission)}")
                 index_counter += 1
+    print("\nIf there isn't any destination shown, try another plane. You'll go back by hitting enter.")
+    print("BUT REMEMBER, you can change the plane only 3 times!") # counting doesn't work at the moment: while loop <-> range_in() crash
+    counts = 3
+    choice_input = input("\nWhere do you want to travel? Type the number or enter: \n")
+    while counts >0:
+        if choice_input == "":
+            counts -= 1
+            print(f"attempts left : {counts}\n")
+            airplane = show_and_choose_airplane(userid)
+            range_in(airplane, userid, turn)
+            if counts == 0:
+                print("Oh no, you can't change your plane anymore. This means your game is OVER!!")
+                game_over_and_save(userid)
+                break
+        else:
+            choice = int(choice_input)
+            if 1 <= choice <= len(destination):
+                chosen = destination[choice - 1]
+                chosenId = chosen[0]
+                chosenDis = chosen[1]
+                chosenCo2 = chosen[2]
 
-    choice_input = input(
-        "\nWhere do you want to travel? Type the number!\n If there isn't any destination shown, try another plane. You'll go back by hitting enter: ")
-    if choice_input == "":
-        airplane = show_and_choose_airplane(userid)
-        range_in(airplane, userid, turn)
-    else:
-        choice = int(choice_input)
-        if 1 <= choice <= len(destination):
-            chosen = destination[choice - 1]
-            chosenId = chosen[0]
-            chosenDis = chosen[1]
-            chosenCo2 = chosen[2]
+                sql3 = f"UPDATE choice SET co2_spent = {chosenCo2}, distance_km = {chosenDis} WHERE (turn = {turn} AND player_name = '{userid}')"
 
-            sql3 = f"UPDATE choice SET co2_spent = {chosenCo2}, distance_km = {chosenDis} WHERE (turn = {turn} AND player_name = '{userid}')"
+                cursor = connection.cursor()
+                cursor.execute(sql3)
 
-            cursor = connection.cursor()
-            cursor.execute(sql3)
-
-            sql5 = f'''UPDATE player SET current_location = '{airportCode}' WHERE player_name = "{userid}"'''
-            cursor = connection.cursor()
-            cursor.execute(sql5)
+                sql5 = f'''UPDATE player SET current_location = '{airportCode}' WHERE player_name = "{userid}"'''
+                cursor = connection.cursor()
+                cursor.execute(sql5)
+                break
 
 
 
