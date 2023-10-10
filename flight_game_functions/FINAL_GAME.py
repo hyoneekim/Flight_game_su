@@ -167,7 +167,7 @@ def range_in (airplane_size, userid, turn):
                 chosenId = chosen[0]
                 chosenDis = chosen[1]
                 chosenCo2 = chosen[2]
-                print(chosen)
+                #print(chosen)
 
                 sql3 = f"UPDATE choice SET co2_spent = {chosenCo2}, distance_km = {chosenDis} WHERE (turn = {turn} AND player_name = '{userid}')"
 
