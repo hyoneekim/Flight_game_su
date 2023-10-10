@@ -32,7 +32,7 @@ def create_player():
         result = cursor.fetchall()
 
         if cursor.rowcount == 0:
-            co2_budget = 10000000
+            co2_budget = 5000000
             co2_consumed = 0
             total_travelled = 0
             sql2 = f"INSERT INTO player(player_name,co2_budget,co2_consumed,total_travelled)VALUES (%s,%s,%s,%s)"
@@ -163,17 +163,18 @@ def range_in (airplane_size, userid, turn):
         else:
             choice = int(choice_input)
             if 1 <= choice <= len(destination):
-                chosen = destination[choice - 1]
+                chosen = destination[choice-1]
                 chosenId = chosen[0]
                 chosenDis = chosen[1]
                 chosenCo2 = chosen[2]
+                print(chosen)
 
                 sql3 = f"UPDATE choice SET co2_spent = {chosenCo2}, distance_km = {chosenDis} WHERE (turn = {turn} AND player_name = '{userid}')"
 
                 cursor = connection.cursor()
                 cursor.execute(sql3)
 
-                sql5 = f'''UPDATE player SET current_location = '{airportCode}' WHERE player_name = "{userid}"'''
+                sql5 = f'''UPDATE player SET current_location = '{chosenId}' WHERE player_name = "{userid}"'''
                 cursor = connection.cursor()
                 cursor.execute(sql5)
                 break
