@@ -53,7 +53,16 @@ class Building:
             print(f"<Elevator No.{index}>")
             ele.go_to_floor(des)
 
+    def fire_alarm(self):
+        for index, ele in enumerate(self.elevators, start = 1):
+            print(f"<Elevator No.{index}>")
+            ele.go_to_floor(self.bottom)
+
+
+
 b = Building(-3,13,3)
 b.run_elevator(3)
 
 print("\n<10_3>\n")
+
+b.fire_alarm()
