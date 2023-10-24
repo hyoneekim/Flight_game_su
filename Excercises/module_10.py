@@ -101,23 +101,31 @@ class Race:
             i = Car(f"ABC-{i + 1}", random.randint(100, 200))
             self.cars.append(i)
 
+    hours = 1
     def hour_passes(self):
-        hours = 1
         for car in self.cars:
             car.accelerate()
             car.drive()
-        hours += 1
+        Race.hours += 1
 
     def print_status(self):
+        print(f"\nResult after {Race.hours} hours:\n")
         for car in self.cars:
             print(f"car {car.num}: Maximum speed: {car.max_speed}km/h, Current speed: {car.current_speed}km/h, Travelled distance: {car.travelled_distance}km")
 
     def race_finished(self):
         for car in self.cars:
             if car.travelled_distance > self.distance:
-             return True
+                return True
 
 r = Race("Grand Demolition Derby", 8000)
 
-while False:
+finished = False
+while not finished:
     r.hour_passes()
+    if Race.hours % 10 == 0:
+        r.print_status()
+    if r.race_finished() == True:
+        finished = True
+        r.print_status()
+
