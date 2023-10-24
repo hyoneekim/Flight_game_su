@@ -66,3 +66,5 @@ b.run_elevator(3)
 print("\n<10_3>\n")
 
 b.fire_alarm()
+
+print("\n<10_4>\n")
