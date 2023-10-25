@@ -49,11 +49,10 @@ class Building:
             i = Elevator(b,t)
             self.elevators.append(i)
 
-    def run_elevator(self, des):
-        print(f"Moving all the elevators to the {des} floor..")
-        for index, ele in enumerate(self.elevators, start = 1):
-            print(f"<Elevator No.{index}>")
-            ele.go_to_floor(des)
+    def run_elevator(self, which, des):
+        print(f"Moving the elevator No.{which} to the {des} floor..")
+        which = self.elevators[which-1]
+        which.go_to_floor(des)
 
     def fire_alarm(self):
         print("Fire alarm has been set off. Moving all the elevators to the bottom floor..")
@@ -64,8 +63,8 @@ class Building:
 
 
 b = Building(-3,13,3)
-b.run_elevator(3)
-b.run_elevator(11)
+b.run_elevator(2,3)
+b.run_elevator(3,11)
 
 print("\n<10_3>\n")
 
