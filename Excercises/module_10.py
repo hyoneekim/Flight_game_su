@@ -65,6 +65,7 @@ class Building:
 b = Building(-3,13,3)
 b.run_elevator(2,3)
 b.run_elevator(3,11)
+b.run_elevator(3,6)
 
 print("\n<10_3>\n")
 
