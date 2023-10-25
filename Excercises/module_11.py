@@ -48,14 +48,6 @@ class Car:
     def drive(self, hours =1):
         self.travelled_distance += self.current_speed * hours
 
-    def accelerate(self):
-        speed = random.randint(-10,15)
-        self.current_speed += speed
-        if self.current_speed < 0:
-            self.current_speed = 0
-        elif self.current_speed > self.max_speed:
-            self.current_speed = self.max_speed - 1
-
 class ElectricCar(Car):
     def __init__(self, n, ms, cap):
         super().__init__(n, ms)
@@ -66,3 +58,14 @@ class GasolineCar(Car):
         super().__init__(n, ms)
         self.volume = vol
 
+cars = []
+cars.append(ElectricCar("ABC-15", 180, 52.5))
+cars.append(GasolineCar("ACD-123", 165, 32.3))
+cars[0].current_speed = 85
+cars[1].current_speed = 78
+hour = 1
+while hour <= 3:
+    for i in cars:
+        i.drive()
+        print(f"The travelled distance of {i.num} after {hour} hours: {i.travelled_distance}km")
+    hour += 1
